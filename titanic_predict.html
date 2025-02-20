@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITANIC 旅客生存预测</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon/favicon.ico') }}" type="image/x-icon">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        form label {
+            font-weight: bold;
+            text-align: left;
+            display: block;
+            margin-bottom: 8px;
+        }
+        form input,
+        form select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        form input[type="submit"] {
+            grid-column: 1 / span 2;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease;
+        }
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .result, .submitted-data {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .result {
+            font-size: 1.5em;
+            color: #28a745;
+            font-weight: bold;
+            background-color: #e9f7ef;
+        }
+        .submitted-data {
+            font-size: 1em;
+            color: #333;
+            background-color: #f1f1f1;
+            text-align: left;
+            line-height: 1.6;
+        }
+        .submitted-data p {
+            margin: 8px 0;
+        }
+        .error-message {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #138496;
+        }
+        .home-button {
+            margin-top: 20px;
+        }
+        .home-button a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .home-button a:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TITANIC 旅客生存预测</h1>
+        
+        <form action="/titanic_predict" method="POST">
+            <div>
+                <label for="pclass">客舱等级 (Pclass)</label>
+                <select name="pclass" id="pclass" required>
+                    <option value="">请选择</option>
+                    <option value="1">1 (头等舱)</option>
+                    <option value="2">2 (二等舱)</option>
+                    <option value="3">3 (三等舱)</option>
+                </select>
+            </div>
+            <div>
+                <label for="age">年龄</label>
+                <input type="number" name="age" id="age" step="0.1" required>
+            </div>
+            <div>
+                <label for="sex">性别</label>
+                <select name="sex" id="sex" required>
+                    <option value="">请选择</option>
+                    <option value="0">女性</option>
+                    <option value="1">男性</option>
+                </select>
+            </div>
+            <div>
+                <label for="sibsp">兄弟姐妹/配偶数量 (SibSp)</label>
+                <input type="number" name="sibsp" id="sibsp" required>
+            </div>
+            <div>
+                <label for="parch">父母/小孩数量 (Parch)</label>
+                <input type="number" name="parch" id="parch" required>
+            </div>
+            <div>
+                <label for="fare">票价 (Fare)</label>
+                <input type="number" name="fare" id="fare" step="0.01" required>
+            </div>
+            <div>
+                <label for="embarked">上船港口 (Embarked)</label>
+                <select name="embarked" id="embarked" required>
+                    <option value="">请选择</option>
+                    <option value="0">C (Cherbourg)</option>
+                    <option value="1">Q (Queenstown)</option>
+                    <option value="2">S (Southampton)</option>
+                </select>
+            </div>
+            <input type="submit" value="预测生存概率">
+        </form>
+
+        {% if submitted_data %}
+            <div class="submitted-data">
+                <p><strong>提交的信息:</strong></p>
+                <p>客舱等级: {{ submitted_data.pclass }}</p>
+                <p>年龄: {{ submitted_data.age }}</p>
+                <p>性别: {{ '女性' if submitted_data.sex == 0 else '男性' }}</p>
+                <p>兄弟姐妹/配偶数量: {{ submitted_data.sibsp }}</p>
+                <p>父母/小孩数量: {{ submitted_data.parch }}</p>
+                <p>票价: {{ submitted_data.fare }}</p>
+                <p>上船港口: {{ 'C (Cherbourg)' if submitted_data.embarked == 0 else 'Q (Queenstown)' if submitted_data.embarked == 1 else 'S (Southampton)' }}</p>
+            </div>
+        {% endif %}
+
+        {% if prediction %}
+            <div class="result">
+                <p>预测生存概率: {{ prediction }}%</p>
+            </div>
+        {% endif %}
+
+        {% if error_message %}
+            <div class="error-message">
+                <p>{{ error_message }}</p>
+            </div>
+        {% endif %}
+
+        <a href="{{ url_for('survived_passengers') }}" class="btn">查看生存旅客</a>
+
+        <div class="home-button">
+            <a href="/">返回首页</a>
+        </div>
+
+        <div class="footer">
+            <p>深度学习应用系统 &copy; 2024</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度学习应用系统 - 时尚服饰分类</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon/favicon.ico') }}" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 2.5em;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #555;
+        }
+        .image-preview {
+            margin-top: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .uploaded-images {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .uploaded-images .image-item {
+            width: 45%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .uploaded-images img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .home-button {
+            margin-top: 30px;
+        }
+        .home-button a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #007BFF;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .home-button a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>深度学习应用系统 - 时尚服饰分类</h1>
+        <p>上传时尚服饰的图片，系统将自动进行分类。</p>
+
+        <form action="/fashion_classify" method="post" enctype="multipart/form-data">
+            <label for="files">选择多张图片进行预测：</label><br>
+            <input type="file" name="files" id="files" required multiple>
+            <br><br>
+            <button type="submit">上传并预测</button>
+        </form>
+
+        {% if results %}
+            <div class="uploaded-images">
+                {% for result in results %}
+                    <div class="image-item">
+                        <img src="{{ url_for('uploaded_file', filename=result.filename) }}" alt="{{ result.filename }}">
+                        <p><strong>分类结果:</strong> {{ result.prediction }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="home-button">
+            <a href="/">返回首页</a>
+        </div>
+    </div>
+</body>
+</html>

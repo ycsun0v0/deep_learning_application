@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生存旅客信息</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon/favicon.ico') }}" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: #ffffff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .button-group {
+            margin-top: 30px;
+        }
+
+        .button-group a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #007BFF;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-group a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>生存旅客信息</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>乘客ID</th>
+                    <th>客舱等级</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                    <th>兄弟/姐妹个数</th>
+                    <th>父母/小孩个数</th>
+                    <th>票价</th>
+                    <th>上船港口</th>
+                    <th>生存概率</th>
+                    <th>预测时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for survivor in survivors %}
+                <tr>
+                    <td>{{ survivor['id'] }}</td>
+                    <td>{{ survivor['pclass'] }}</td>
+                    <td>{{ survivor['age'] }}</td>
+                    <td>{{ '女性' if survivor['sex'] == 0 else '男性' }}</td>
+                    <td>{{ survivor['sibsp'] }}</td>
+                    <td>{{ survivor['parch'] }}</td>
+                    <td>{{ survivor['fare'] }}</td>
+                    <td>{{ survivor['embarked'] }}</td>
+                    <td>
+                        {% if survivor['survival_prob'] is not none %}
+                            {{ ('%.2f' % survivor['survival_prob']) if survivor['survival_prob'] is defined else 'N/A' }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ survivor['prediction_time'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="button-group">
+            <a href="/">返回首页</a>
+            <a href="{{ url_for('titanic_predict') }}">返回预测页面</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度学习应用系统 - 猫狗分类</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon/favicon.ico') }}" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 2.5em;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #555;
+        }
+        .image-preview {
+            margin-top: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .home-button {
+            margin-top: 30px;
+        }
+        .home-button a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #007BFF;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .home-button a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>深度学习应用系统 - 猫狗分类</h1>
+        <p>上传一张猫或狗的图片，系统将自动进行分类。</p>
+
+        <form action="/animal_classify" method="post" enctype="multipart/form-data">
+            <label for="file">选择一张图片进行预测：</label><br>
+            <input type="file" name="file" id="file" required>
+            <br><br>
+            <button type="submit">上传并预测</button>
+        </form>
+
+        {% if prediction_text %}
+            <div class="result">
+                <strong>预测结果:</strong> {{ prediction_text }}
+            </div>
+        {% endif %}
+
+        {% if image_file %}
+            <div class="image-preview">
+                <h3>上传的图像：</h3>
+                <img src="{{ image_url }}" alt="上传的图片">
+            </div>
+        {% endif %}
+
+        <div class="home-button">
+            <a href="/">返回首页</a>
+        </div>
+    </div>
+</body>
+</html>

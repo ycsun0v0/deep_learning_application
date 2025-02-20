@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度学习应用系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon/favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>深度学习应用系统</h1>
+            <p>探索强大的深度学习应用，选择一个场景开始体验</p>
+        </header>
+
+        <div class="menu">
+            <a href="{{ url_for('flower_classify_page') }}" class="menu-item">花卉图像分类</a>
+            <a href="{{ url_for('fashion_classify_page') }}" class="menu-item">时尚服饰图像分类</a>
+            <a href="{{ url_for('titanic_predict') }}" class="menu-item">Titanic生存预测</a>
+            <a href="{{ url_for('animal_classify_page') }}" class="menu-item">猫狗图像分类</a>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 深度学习应用系统 | 所有权利保留</p>
+        </footer>
+    </div>
+</body>
+</html>
